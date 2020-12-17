@@ -52,6 +52,8 @@ class Slash {
             }
         }); 
         
+        return this;
+        
     }
     
 }

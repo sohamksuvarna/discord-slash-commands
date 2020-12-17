@@ -1,21 +1,25 @@
 class Slash {
+    
     constructor(client) {
-    this.axios = require('axios')
-    this.client = client
-    this.client.token = client.token
+        this.axios = require('axios')
+        this.client = client
     }
+    
     command(options) {
-        let url = `https://discord.com/api/v8/applications/${this.client.user.id}/commands`
-        if (!options.data) return console.log("[ERROR]: Data for command wasn't provided") 
-        if (options.guildOnly === true && !options.guildID) return console.log("[ERROR] Command was guild only, but no guild ID provided") 
-        if (options.guildOnly === true) url = `https://discord.com/api/v8/applications/${this.client.user.id}/guilds/${options.guildID}/commands`
-        if (!options.data.name) return console.log("[ERROR] Command name wasn't provided")
-        if (!options.data.content) return console.log("[ERROR] No content was provided")
+        let url = `https://discord.com/api/v8/applications/${this.client.user.id}/commands`;
+        
+        if (!options.data) throw new Error("[ERROR]: Data for command wasn't provided");
+        if (options.guildOnly === true && !options.guildID) throw new Error("[ERROR] Command was guild only, but no guild ID provided"); 
+        if (options.guildOnly === true) url = `https://discord.com/api/v8/applications/${this.client.user.id}/guilds/${options.guildID}/commands`;
+        if (!options.data.name) throw new Error("[ERROR] Command name wasn't provided");
+        if (!options.data.content) throw new Error("[ERROR] No content was provided");
+        
         let cmd = {
-            "name": options.data.name,
-            "description": options.data.description || "No description provided",
-            "options": options.data.options || []
+            name: options.data.name,
+            description: options.data.description || "No description provided",
+            options: options.data.options || []
         }
+        
         let config = {
             method: 'POST',
             headers: {
@@ -26,26 +30,30 @@ class Slash {
             url
         }
         
-        this.axios(config).then(function(response) {
+        this.axios(config)
+        .then(response => {
             console.log(`[SUCCESS] Command created`);
-        }).catch(function(err) {
-        console.log(`[ERROR] Request failed\n${err}`);
+        })
+        .catch(err => {
+            console.log(`[ERROR] Request failed\n${err}`);
         });
 
         this.client.on("raw", async event => {
             if (event.t === "INTERACTION_CREATE") {
-            let commandName = event.d.data.name;
-            if (commandName === options.data.name) return (await this.client.api.interactions(event.d.id)[event.d.token].callback.post({
-            data: {
-            type: options.data.type || 4,
-            data: {
-            content: options.data.content
+                let commandName = event.d.data.name;
+                if (commandName === options.data.name) return (await this.client.api.interactions(event.d.id)[event.d.token].callback.post({
+                    data: {
+                        type: options.data.type || 4,
+                        data: {
+                            content: options.data.content
+                        }
+                    }
+                }));
             }
-            }
-            }));
-            }
-        });            
+        }); 
+        
     }
+    
 }
 
 module.exports = Slash;

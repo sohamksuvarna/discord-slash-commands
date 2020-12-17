@@ -1,0 +1,20 @@
+{
+  "name": "discord-slash-commands",
+  "version": "1.0.1",
+  "description": "Slash commands for Discord",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "slash",
+    "slash-commands",
+    "discord",
+    "discord-slash-commands"
+  ],
+  "author": "shadeoxide",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.0"
+  }
+}

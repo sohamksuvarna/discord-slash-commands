@@ -78,6 +78,26 @@ class Slash {
                 .catch((e) => reject(e));
         });
     }
+    deleteCommand(options) {
+        if (!options.id)
+            throw new Error("[ERROR]: No Command ID was provided!");
+        var url = `https://discord.com/api/v8/applications/${
+            this.client.user.id
+        }/${
+            options.guildID ? "guilds/" + options.guildID + "/" : ""
+        }commands/${options.id}`;
+        console.log(url);
+        this.axios({
+            method: "delete",
+            url,
+            headers: {
+                Authorization: "Bot " + this.client.token,
+            },
+        }).catch((err) => {
+            console.log(`[ERROR] Request failed\n${err}`);
+        });
+        return this;
+    }
 }
 
 module.exports = Slash;

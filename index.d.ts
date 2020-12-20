@@ -25,4 +25,6 @@ export class Slash {
     public command(options: CommandOptions): Slash;
 
     public getCommands(): getCommandsType[];
+
+    public deleteCommand(options: { id: string; guildID?: string });
 }

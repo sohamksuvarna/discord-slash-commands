@@ -86,7 +86,6 @@ class Slash {
         }/${
             options.guildID ? "guilds/" + options.guildID + "/" : ""
         }commands/${options.id}`;
-        console.log(url);
         this.axios({
             method: "delete",
             url,

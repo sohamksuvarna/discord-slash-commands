@@ -18,8 +18,9 @@ class Slash {
         if (!options.data.name)
             throw new Error("[ERROR] Command name wasn't provided");
         if (!options.data.content)
-            throw new Error("[ERROR] No content was provided");
-
+            throw new Error("[ERROR] No content was provided")
+        if (!options.data.embeds) options.data.embeds = [] 
+            
         let cmd = {
             name: options.data.name,
             description: options.data.description || "No description provided",
@@ -45,6 +46,8 @@ class Slash {
             });
 
         this.client.on("raw", async (event) => {
+            let flag = 0;
+            if (options.ephemeral === true) flag = 1 << 6
             if (event.t === "INTERACTION_CREATE") {
                 let commandName = event.d.data.name;
                 if (commandName === options.data.name)
@@ -55,6 +58,8 @@ class Slash {
                                 type: options.data.type || 4,
                                 data: {
                                     content: options.data.content,
+                                    embeds: options.data.embeds,
+                                    flags: flag
                                 },
                             },
                         });
@@ -63,11 +68,13 @@ class Slash {
 
         return this;
     }
-    getCommands() {
+    getCommands(options = {}) {
         return new Promise((resolve, reject) => {
+            let url = `https://discord.com/api/v8/applications/${this.client.user.id}/commands`
+            if (options.guildID) url = `https://discord.com/api/v8/applications/${this.client.user.id}/guilds/${options.guildID}/commands`
             this.axios
                 .get(
-                    `https://discord.com/api/v8/applications/${this.client.user.id}/commands`,
+                    url,
                     {
                         headers: {
                             Authorization: "Bot " + this.client.token,
@@ -86,6 +93,7 @@ class Slash {
         }/${
             options.guildID ? "guilds/" + options.guildID + "/" : ""
         }commands/${options.id}`;
+        console.log(url);
         this.axios({
             method: "delete",
             url,

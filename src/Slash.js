@@ -76,7 +76,7 @@ class Slash extends EventEmitter {
     }
 
     edit(options) {
-
+        //todo
     }
 
     all(options) {
@@ -104,7 +104,7 @@ class Slash extends EventEmitter {
     }
 
     find(options) {
-
+        //todo
     }
 }
 

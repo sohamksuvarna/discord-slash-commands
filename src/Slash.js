@@ -24,7 +24,7 @@ class Slash extends EventEmitter {
         if (!options.data) throw new Error("[ERROR] Data for the command was not provided");
 
         if (options.guildOnly === true && !options.guildID) throw new Error("[ERROR] Command was guild-only, but guild ID was not provided.")
-        if (isNaN(options.guildID)) throw new Error("[ERROR] Guild ID is invalid.")        
+        if (options.guildOnly === true && isNaN(options.guildID)) throw new Error("[ERROR] Guild ID is invalid.")        
 
         if (options.guildOnly === true) url = `https://discord.com/api/v8/applications/${this.client.user.id}/guilds/${options.guildID}/commands`;
         
